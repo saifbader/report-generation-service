@@ -6,7 +6,9 @@ plugins {
     id("io.spring.dependency-management") version "1.0.13.RELEASE" apply false
     kotlin("plugin.spring") version kotlinVersion apply false
     kotlin("plugin.jpa") version kotlinVersion apply false
+
     kotlin("jvm") version kotlinVersion
+    kotlin("plugin.allopen") version kotlinVersion
 }
 
 allprojects {
@@ -33,7 +35,16 @@ subprojects {
         plugin("org.springframework.boot")
         plugin("org.jetbrains.kotlin.jvm")
         plugin("org.jetbrains.kotlin.plugin.spring")
+        plugin("org.jetbrains.kotlin.plugin.allopen")
         plugin("org.jetbrains.kotlin.plugin.jpa")
+    }
+
+    allOpen {
+        annotations(
+            "javax.persistence.Entity",
+            "javax.persistence.Embeddable",
+            "javax.persistence.MappedSuperclass"
+        )
     }
 
     repositories {
@@ -51,6 +62,7 @@ subprojects {
     }
 
     dependencies {
+        compileOnly("org.jetbrains.kotlin:kotlin-allopen")
         annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
         testImplementation("org.springframework.boot:spring-boot-starter-test")
     }
